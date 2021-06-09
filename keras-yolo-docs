@@ -1,0 +1,40 @@
+# create virtual enviroment, I used conda from Anaconda. You can use python's venv if you want
+conda create -n objects python=3.6
+conda activate objects
+
+# install needed libraries
+pip install tensorflow==1.14.0
+or 
+pip install tensorflow-gpu==1.14.0  # careful with cuda version here it should be 10, to check cuda version: nvcc --version
+# if you have cuda version 9, try installing tensorflow-gpu==1.12.0
+# if you face problems later, it might be due to GPU compatiblity with software and the library. Try to use tensorflow without GPU support
+
+pip install keras==2.1.5
+pip install Pillow matplotlib opencv-python
+
+# get the code for YOLO, built with Keras library
+git clone https://github.com/qqwweee/keras-yolo3.git
+
+cd keras-yolo3
+
+# download YOLOv3 weights from YOLO website:
+wget https://pjreddie.com/media/files/yolov3.weights
+
+#convert the Darknet YOLO model to a Keras model, run the following command
+python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
+
+# you sould now be able to use YOLO as follows:
+# detection on Images, runt the following command, then enter the image path
+python yolo_video.py --image
+
+# detection on Videos, run the following command
+python yolo_video.py [video_path] [output_path (optional)]
+python yolo_video.py --input 0
+
+
+Note: if you face the following error: "AttributeError: 'str' objects has no attribute 'decode'"
+it might be due incompatibility with h5py libarary. Solve this, uninstall it then install a version compatable with the other libraries:
+pip uninstall h5py
+pip install h5py==2.10.0
+
+
